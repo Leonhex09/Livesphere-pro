@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MS TV</title>
+
+    <!-- Stylesheets -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+      #bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+} 
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #3498db;
+            margin-top: 20px;
+        }
+
+        /* Loader */
+        #loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Main Content */
+        #content-container {
+            display: none;
+            margin: 20px;
+        }
+
+        .channel-thumb {
+            width: 250px;
+            height: 150px;
+            margin: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .channel-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        .video-player {
+          max-width: 800px;
+  margin: 20px auto;
+  border-radius: 10px;
+  background-color: #333;
+  background-image: url('yun.jpg');
+        }
+
+        .channels-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .footer {
+            background-color: #3498db;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        a {
+            color: white;
+            background-color: #28a745;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin: 10px;
+            font-size: 1.1rem;
+        }
+
+        a:hover {
+            background-color: #218838;
+        }
+        
+        #bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+
+ #sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100%;
+  background-color: #333;
+  color: #fff;
+  display: none;
+  width: 160px;
+  transition: 10s;
+}
+
+
+
+#sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 170px;
+}
+
+#sidebar li{
+  margin-bottom: 20px;
+  font-size: 20px;
+  margin-left: 0px;
+}
+
+#sidebar a {
+  color: #fff;
+  text-decoration: none;
+}
+
+#sidebar a:hover {background: white;
+  color: grey;
+}
+
+        
+        #sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 160px;
+  height: 100%;
+  background-color: #333;
+  color: #fff;
+  display: none;
+  transition: width 1s, opacity 1s;
+  opacity: 0;
+}
+
+        
+        
+        
+     
+     
+     #menu{
+     position: absolute;
+     height: 40px;
+     transform: rotate(40deg);
+     display: none;
+     }
+     
+     #menuo{
+     position: absolute;
+     left: 0px;
+     top: 0px;
+     height: 40px;
+     
+     
+     }
+     
+     #logo{
+         height: 150px;
+         position: absolute;
+         left: 0px;
+         width: 100%;
+         margin-left:0px;
+         padding: 0px;
+     }
+     
+     a{
+     text-decoration: none;
+     color: white;
+         display: block;
+     }
+     
+    
+        
+       
+		.back-to-top {
+			position: fixed;
+			bottom: 20px;
+			right: 20px;
+			background-color: #007bff;
+			color: white;
+			padding: 10px 15px;
+			border-radius: 5px;
+			cursor: pointer;
+			display: none;
+		}
+		
+		.back-to-top:hover {
+			background-color: #0056b3;
+		}
+		
+		@media only screen and (max-width: 600px) {
+			.back-to-top {
+				bottom: 10px;
+				right: 10px;
+			}
+		}
+        
+        #topbar{
+            background: grey;
+           height: 50px;
+        }
+        
+        #uplogo{
+            
+            height: 40px;
+            width: 40px;
+            border-radius: 100px;
+            position: absolute;
+            left: 60px;
+            top: 10px;
+            filter: drop-shadow(1px 1px 20px blue)
+        }
+        
+       div{
+           
+           filter: drop-shadow(1px 1px 1px green)
+       } 
+        
+    h2{
+        color: blue;
+        font-size: 40px;
+        position: absolute;
+        top: 7px;
+        left: 105px;
+        text-shadow: 1px 2px 5px black        
+    }    
+        h4{
+            position: absolute;
+            left: 180px;
+            top: 18px;
+            text-shadow: 1px 2px 5px blue
+        }
+        
+    </style>
+</head>
+<body>
+    
+ <div id="topbar">   <img src="menu.png" alt="" id="menuo" onclick="show()">
+ <img src="yun.jpg" alt="" id="uplogo">
+ <h2>Live</h2>
+ <h4>Sphere</h4>
+ </div>
+    <!-- Loader -->
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="content-container">
+        <!-- Video Player -->
+        <div class="video-player" id="video-player">
+            <video id="live-tv" width="100%" height="450" controls>
+                <source id="video-source" src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <h3>Choose a Channel</h3>
+        <div class="channels-container">
+            
+            <div class="channel" onclick="changeChannel('https://stream.hydeinnovations.com/bukedde1flussonic/index.m3u8?')">
+                <img src="./b1.jpg" alt="Channel 2" class="channel-thumb">
+                <p>BUKEDDE 1</p>
+            </div>
+            
+            
+            <div class="channel" onclick="changeChannel('https://stream.hydeinnovations.com/bukedde2flussonic/index.m3u8?')">
+                <img src="./b2.jpg" alt="Channel 2" class="channel-thumb">
+                <p>BUKEDDE 2</p>
+            </div>
+            <div class="channel" onclick="changeChannel('https://webstreaming.viewmedia.tv/web_035/Stream/playlist.m3u8')">
+                <img src="./ark.jpg" alt="Channel 3" class="channel-thumb">
+                <p>ARK TV</p>
+            </div>
+          
+          
+          
+                      <div class="channel" onclick="changeChannel('http://fort.co-works.org:8080/hls/live.stream.m3u8')">
+                <img src="./ftv.jpg" alt="Channel 3" class="channel-thumb">
+                <p>FORT TV</p>
+            </div>
+            
+            
+            
+                        <div class="channel" onclick="changeChannel('https://stream.hydeinnovations.com/luotv-flussonic/index.m3u8')">
+                <img src="./wltv.jpg" alt="Channel 3" class="channel-thumb">
+                <p>WAN LUO TV</p>
+            </div>
+            
+            
+            
+                        <div class="channel" onclick="changeChannel('https://panel.freedomflixtv.org:3665/hybrid/play.m3u8?')">
+                <img src="./fltv.jpg" alt="Channel 3" class="channel-thumb">
+                <p>FREEDOM LOVE TV</p>
+            </div>
+            
+            
+            
+                        <div class="channel" onclick="changeChannel('http://streamfi-alphadgtl1.zettawiseroutes.com:8080/hls/stream_src.m3u8?')">
+                <img src="./btv.jpg" alt="Channel 3" class="channel-thumb">
+                <p>B TV</p>
+            </div>
+            
+            
+            
+            
+                        <div class="channel" onclick="changeChannel('https://webstreaming.viewmedia.tv/web_035/Stream/playlist.m3u8')">
+                <img src="./ark.jpg" alt="Channel 3" class="channel-thumb">
+                <p>ARK TV</p>
+            </div>
+            
+            
+            
+            
+                        <div class="channel" onclick="changeChannel('https://webstreaming.viewmedia.tv/web_035/Stream/playlist.m3u8')">
+                <img src="./ark.jpg" alt="Channel 3" class="channel-thumb">
+                <p>ARK TV</p>
+            </div>
+            
+          
+          
+        </div>
+
+        <div class="international">
+            
+         <div class="channel" onclick="changeChannel('https://cdn.freevisiontv.co.za/sttv/smil:1kzn.stream.smil/playlist.m3u8')">
+    <img src="https://admango.cdn.mangomolo.com/analytics/uploads/188/6544bebaae.jpg" alt="1KZN TV (576p)" class="channel-thumb">
+    <p>1KZN TV (576p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://2gblive.akamaized.net/hls/live/2033805/2GB/index.m3u8')">
+    <img src="https://i.ibb.co/jwM8DFG/2GB-1.png" alt="2GB Sydney (1080p)" class="channel-thumb">
+    <p>2GB Sydney (1080p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://3abn.bozztv.com/3abn2/d2d_live/smil:d2d_live.smil/playlist.m3u8')">
+    <img src="https://i.imgur.com/JwCLwQ2.png" alt="3ABN Dare To Dream Network" class="channel-thumb">
+    <p>3ABN Dare To Dream Network</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://3abn.bozztv.com/3abn2/3abn_live/smil:3abn_live.smil/playlist.m3u8')">
+    <img src="https://i.imgur.com/bgJQIyW.png" alt="3ABN English" class="channel-thumb">
+    <p>3ABN English</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://3abn.bozztv.com/3abn2/Int_live/smil:Int_live.smil/playlist.m3u8')">
+    <img src="https://i.imgur.com/8YMLPA3.png" alt="3ABN International" class="channel-thumb">
+    <p>3ABN International</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://3abn.bozztv.com/3abn2/Kids_live/smil:Kids_live.smil/playlist.m3u8')">
+    <img src="https://i.imgur.com/SUPQAok.png" alt="3ABN Kids" class="channel-thumb">
+    <p>3ABN Kids</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://3abn.bozztv.com/3abn1/PraiseHim/smil:PraiseHim.smil/playlist.m3u8')">
+    <img src="https://i.imgur.com/iBcqT8L.png" alt="3ABN Praise Him Music Network" class="channel-thumb">
+    <p>3ABN Praise Him Music Network</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://3abn.bozztv.com/3abn2/Pro_live/smil:Pro_live.smil/playlist.m3u8')">
+    <img src="https://yt3.googleusercontent.com/ytc/AIdro_mb4TLclxAUPvlnV84blg4YSnZYjspMitP_sS2rX_5IYQ=s512-c-k-c0x00ffffff-no-rj" alt="3ABN Proclaim! Network" class="channel-thumb">
+    <p>3ABN Proclaim! Network</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://3awlive.akamaized.net/hls/live/2032295/3AW/index.m3u8')">
+    <img src="https://i.imgur.com/Z4MdB0S.png" alt="3AW Melbourne (1080p)" class="channel-thumb">
+    <p>3AW Melbourne (1080p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://goliveafrica.media:9998/live/64d21e682fd26/index.m3u8')">
+    <img src="https://i.imgur.com/im3g7T2.png" alt="3 Stones TV (240p) [Not 24/7]" class="channel-thumb">
+    <p>3 Stones TV (240p) [Not 24/7]</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://6prlive.akamaized.net/hls/live/2033806/6PR/index.m3u8')">
+    <img src="https://i.imgur.com/Q9iCxg1.png" alt="6PR Perth (1080p)" class="channel-thumb">
+    <p>6PR Perth (1080p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('http://89.254.128.5:22280/8tv_hd/index.m3u8')">
+    <img src="https://i.imgur.com/F8P8GY3.png" alt="8TV (1080p)" class="channel-thumb">
+    <p>8TV (1080p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://9now-livestreams.akamaized.net/hls/live/2008311/gem-syd/master.m3u8')">
+    <img src="https://i.imgur.com/cwLzqaw.png" alt="9Gem (720p) [Geo-blocked]" class="channel-thumb">
+    <p>9Gem (720p) [Geo-blocked]</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://9now-livestreams.akamaized.net/hls/live/2008312/go-syd/master.m3u8')">
+    <img src="https://i.imgur.com/RLijQI8.png" alt="9Go! (720p) [Geo-blocked]" class="channel-thumb">
+    <p>9Go! (720p) [Geo-blocked]</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://9now-livestreams.akamaized.net/hls/live/2008313/life-syd/master.m3u8')">
+    <img src="https://i.imgur.com/HlJOrGI.png" alt="9Life (720p) [Geo-blocked]" class="channel-thumb">
+    <p>9Life (720p) [Geo-blocked]</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://9now-livestreams.akamaized.net/hls/live/2010626/rush-syd/master.m3u8')">
+    <img src="https://upload.wikimedia.org/wikipedia/en/c/c2/Logo_of_9RUSH.png" alt="9Rush (720p) [Geo-blocked]" class="channel-thumb">
+    <p>9Rush (720p) [Geo-blocked]</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://i.mjh.nz/10bold-nsw.m3u8')">
+    <img src="https://i.imgur.com/2xglh33.png" alt="10 Bold (720p) [Geo-blocked]" class="channel-thumb">
+    <p>10 Bold (720p) [Geo-blocked]</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://dce3793146fef017.mediapackage.us-west-2.amazonaws.com/out/v1/55cdf73af7894775ba6de8f57482b66a/CMAF_HLS/index.m3u8')">
+    <img src="https://i.imgur.com/2xglh33.png" alt="10 Bold Adelaide (1080p)" class="channel-thumb">
+    <p>10 Bold Adelaide (1080p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://i.mjh.nz/10peach-nsw.m3u8')">
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/d8/10_Peach_logo_2018.svg/512px-10_Peach_logo_2018.svg.png" alt="10 Peach (720p) [Geo-blocked]" class="channel-thumb">
+    <p>10 Peach (720p) [Geo-blocked]</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://content.uplynk.com/channel/ff809e6d9ec34109abfb333f0d4444b5.m3u8')">
+    <img src="https://i.imgur.com/CMANZWk.png" alt="23 ABC Bakersfield CA (KERO) (720p)" class="channel-thumb">
+    <p>23 ABC Bakersfield CA (KERO) (720p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://rtvelivestream.akamaized.net/rtvesec/24h/24h_main_dvr.m3u8')">
+    <img src="https://i.imgur.com/IUVRm5L.png" alt="24 Horas Internacional [Geo-blocked]" class="channel-thumb">
+    <p>24 Horas Internacional [Geo-blocked]</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://d1j2u714xk898n.cloudfront.net/v1/master/9d062541f2ff39b5c0f48b743c6411d25f62fc25/STIRR-MuxIP-24HourFreeMovies/145.m3u8')">
+    <img src="https://i.imgur.com/iSVnzR1.png" alt="24 Hour Free Movies (720p)" class="channel-thumb">
+    <p>24 Hour Free Movies (720p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://30a-tv.com/darcizzle.m3u8')">
+    <img src="https://i.imgur.com/Q4l2uao.png" alt="30A Darcizzle Offshore (720p)" class="channel-thumb">
+    <p>30A Darcizzle Offshore (720p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://www.30a-tv.com/InvPit.m3u8')">
+    <img src="https://i.imgur.com/CKCtZo7.png" alt="30A Investment Pitch" class="channel-thumb">
+    <p>30A Investment Pitch</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://30a-tv.com/feeds/ceftech/30atvmusic.m3u8')">
+    <img src="https://i.imgur.com/gNWg9tl.png" alt="30A Music Channel" class="channel-thumb">
+    <p>30A Music Channel</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://30a-tv.com/feeds/720p/63.m3u8')">
+    <img src="https://30a.media/wp-content/uploads/2023/08/pzaz-30atv-2-230x366-ridiculous.jpg" alt="30A Ridiculous TV (720p)" class="channel-thumb">
+    <p>30A Ridiculous TV (720p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://30a-tv.com/sidewalks.m3u8')">
+    <img src="https://i.imgur.com/HSdwqZN.png" alt="30A Sidewalks (720p)" class="channel-thumb">
+    <p>30A Sidewalks (720p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://30a-tv.com/beachy.m3u8')">
+    <img src="https://i.imgur.com/0j5Aget.png" alt="30A The Beach Show (720p)" class="channel-thumb">
+    <p>30A The Beach Show (720p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/6176f39e709f160007ec61c3/master.m3u8?appName=web&appVersion=unknown&clientTime=0&deviceDNT=0&deviceId=6c263250-30d3-11ef-9cf5-e9ddff8ff496&deviceMake=Chrome&deviceModel=web&deviceType=web&deviceVersion=unknown&includeExtendedEvents=false&serverSideAds=false&sid=6c0b95c9-8da8-4149-8f7a-ba568202266f')">
+    <img src="https://i.imgur.com/Q7THHhX.png" alt="48 Hours" class="channel-thumb">
+    <p>48 Hours</p>
+</div>
+
+<div class="channel" onclick="changeChannel('http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4d878d3d19b30007d2e782/master.m3u8?appName=web&appVersion=unknown&clientTime=0&deviceDNT=0&deviceId=6c263252-30d3-11ef-9cf5-e9ddff8ff496&deviceMake=Chrome&deviceModel=web&deviceType=web&deviceVersion=unknown&includeExtendedEvents=false&serverSideAds=false&sid=7c57f1f3-2078-4f92-a4b5-6cd444220a70')">
+    <img src="https://i.imgur.com/mgXeEE4.png" alt="70s Cinema" class="channel-thumb">
+    <p>70s Cinema</p>
+</div>
+
+<div class="channel" onclick="changeChannel('http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5ca525b650be2571e3943c63/master.m3u8?appName=web&appVersion=unknown&clientTime=0&deviceDNT=0&deviceId=6c263253-30d3-11ef-9cf5-e9ddff8ff496&deviceMake=Chrome&deviceModel=web&deviceType=web&deviceVersion=unknown&includeExtendedEvents=false&serverSideAds=false&sid=b52c759c-a26c-4e65-828b-14277d6117e0')">
+    <img src="https://i.imgur.com/nkEeYfI.png" alt="80s Rewind" class="channel-thumb">
+    <p>80s Rewind</p>
+</div>
+
+<div class="channel" onclick="changeChannel('http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4d86f519358a00072b978e/master.m3u8?appName=web&appVersion=unknown&clientTime=0&deviceDNT=0&deviceId=6c265961-30d3-11ef-9cf5-e9ddff8ff496&deviceMake=Chrome&deviceModel=web&deviceType=web&deviceVersion=unknown&includeExtendedEvents=false&serverSideAds=false&sid=71f86833-3dd6-41ac-a9b8-4a4ec8873306')">
+    <img src="https://i.imgur.com/KoGko6M.png" alt="90s Throwback" class="channel-thumb">
+    <p>90s Throwback</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://ythls.armelin.one/channel/UCZTlGPEnQ66TFG0m6Wa3KFQ.m3u8')">
+    <img src="https://i.imgur.com/IMFwHbp.png" alt="96.3 Easy Rock (1080p) [Not 24/7]" class="channel-thumb">
+    <p>96.3 Easy Rock (1080p) [Not 24/7]</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://live2.tensila.com/pearl-v-1.pearlfm/hls/live/mystream.m3u8')">
+    <img src="https://i.imgur.com/GY750xh.jpg" alt="98.1 Pearl FM (720p)" class="channel-thumb">
+    <p>98.1 Pearl FM (720p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('http://100automoto.tv:1935/bgtv1/autotv/playlist.m3u8')">
+    <img src="https://i.imgur.com/SZtJfOG.png" alt="100% Auto Moto TV (406p) [Not 24/7]" class="channel-thumb">
+    <p>100% Auto Moto TV (406p) [Not 24/7]</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://5db313b643fd8.streamlock.net/111TV/111TV/playlist.m3u8')">
+    <img src="https://i.imgur.com/kVREx1Q.png" alt="111 TV (720p)" class="channel-thumb">
+    <p>111 TV (720p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('http://hlsdpi-cdn-chqtx02.totalstream.net/dpilive/247retro/ret/dai/playlist.m3u8')">
+    <img src="https://i.imgur.com/QqQL7ss.png" alt="247 Retro TV (432p) [Not 24/7]" class="channel-thumb">
+    <p>247 Retro TV (432p) [Not 24/7]</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://ythls.armelin.one/channel/UCYTTndlEZ-zBvVAxtayuNEA.m3u8')">
+    <img src="https://i.imgur.com/rXrCS3K.png" alt="947 Joburg (720p) [Not 24/7]" class="channel-thumb">
+    <p>947 Joburg (720p) [Not 24/7]</p>
+</div>
+
+<div class="channel" onclick="changeChannel('http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f4d83e0a382c00007bc02e7/master.m3u8?appName=web&appVersion=unknown&clientTime=0&deviceDNT=0&deviceId=6c265960-30d3-11ef-9cf5-e9ddff8ff496&deviceMake=Chrome&deviceModel=web&deviceType=web&deviceVersion=unknown&includeExtendedEvents=false&serverSideAds=false&sid=3b3051db-b19e-4913-a7e9-fddc37302264')">
+    <img src="https://i.imgur.com/xqo5PxO.png" alt="90210" class="channel-thumb">
+    <p>90210</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://stream.sen-gt.com/A2itv/myStream/playlist.m3u8')">
+    <img src="https://i.imgur.com/YlDFir7.jpg" alt="A2i TV (1080p)" class="channel-thumb">
+    <p>A2i TV (1080p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://qp-pldt-live-grp-02-prod.akamaized.net/out/u/tv5.m3u8')">
+    <img src="https://i.imgur.com/1zsdloF.png" alt="A2Z (360p) [Not 24/7]" class="channel-thumb">
+    <p>A2Z (360p) [Not 24/7]</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://ythls.armelin.one/channel/UC-LRBEUet4xX2fRB3JitFxg.m3u8')">
+    <img src="https://i.imgur.com/6tWCzTp.png" alt="A News (1080p) [Not 24/7]" class="channel-thumb">
+    <p>A News (1080p) [Not 24/7]</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://streamer1.connectto.com/AABC_WEB_1201/index.m3u8')">
+    <img src="https://i.imgur.com/Spu4s89.png" alt="AABC TV (480p)" class="channel-thumb">
+    <p>AABC TV (480p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://ythls.armelin.one/channel/UCMeyWH1vyb1TT6Vimp4MqLA.m3u8')">
+    <img src="https://i.imgur.com/YKhnHE6.png" alt="AACTV America's Auction Channel (1080p)" class="channel-thumb">
+    <p>AACTV America's Auction Channel (1080p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://apollo.production-public.tubi.io/live/ac-wmar.m3u8')">
+    <img src="https://upload.wikimedia.org/wikipedia/en/d/db/2_ABC_WMAR_Baltimore.png" alt="ABC 2 Baltimore MD (WMAR) (720p)" class="channel-thumb">
+    <p>ABC 2 Baltimore MD (WMAR) (720p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://d1wdgbxqfhyvfu.cloudfront.net/wbrz-live-1/smil:wbrz-live.smil/playlist.m3u8')">
+    <img src="https://i.imgur.com/n057TgX.png" alt="ABC 2 Baton Rouge LA (WBRZ) (720p) [Not 24/7]" class="channel-thumb">
+    <p>ABC 2 Baton Rouge LA (WBRZ) (720p) [Not 24/7]</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://apollo.production-public.tubi.io/live/ac-wtae.m3u8')">
+    <img src="https://i.imgur.com/4iEFQjd.png" alt="ABC 4 Pittsburg PA (WTAE) (720p)" class="channel-thumb">
+    <p>ABC 4 Pittsburg PA (WTAE) (720p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://content.uplynk.com/2c88dfe19e1447e6a6aa27e8e143a140.m3u8')">
+    <img src="https://i.imgur.com/8vXRrRe.jpg" alt="ABC 4 Seattle WA (KOMO-TV) (720p)" class="channel-thumb">
+    <p>ABC 4 Seattle WA (KOMO-TV) (720p)</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://stream.krgv.com/krgv-english/krgv-english.smil/playlist.m3u8')">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/ABC-2021-LOGO.svg/512px-ABC-2021-LOGO.svg.png" alt="ABC 5" class="channel-thumb">
+    <p>ABC 5</p>
+</div>
+
+<div class="channel" onclick="changeChannel('https://stream.krgv.com/krgv-english/krgv-english.smil/playlist.m3u8')">
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a9/WCVB-TV_%282021%29.svg/512px-WCVB-TV_%282021%29.svg.png" alt="ABC 5 Boston MA (WCVB) (720p)" class="channel-thumb">
+    <p>ABC 5 Boston MA (WCVB) (720p)</p>
+</div>  
+            
+        </div>
+        <div>
+            <a href="whatsapp://send?text=Hello%20I%20would%20like%20more%20information%20about%20Live%20TV" target="_blank">Send WhatsApp</a>
+            <a href="http://t.me/SrRogers" target="_blank">Send Telegram</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>By Steven Mugeni © 2024</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        // Hide loader and show content after page load
+        window.addEventListener("load", function () {
+            document.getElementById("loader-wrapper").style.display = "none";
+            document.getElementById("content-container").style.display = "block";
+        });
+
+        // Function to change the live TV stream
+        function changeChannel(url) {
+            document.getElementById("video-source").src = url;
+            document.getElementById("live-tv").load();
+            document.getElementById("live-tv").play();
+        }
+    </script>
+    
+        <div id="sidebar">
+        <img src="hphoto.jpg" alt="" id="logo">
+  
+       <img src="menu.png" alt="" id="menu" onclick="hide()">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Contact</a></li>
+    <li><a href="#">FAQs</a></li>
+    <li><a href="#">Support</a></li>
+  </ul>
+</div>
+
+
+
+
+<script>
+
+
+function show() {
+  document.getElementById('sidebar').style.display = "block";
+  document.getElementById('sidebar').style.opacity = "1";
+  document.getElementById('sidebar').style.width = "160px";
+  document.getElementById('menu').style.display = "block";
+  document.getElementById('menuo').style.display = "none";
+}
+
+function hide() {
+  document.getElementById('sidebar').style.opacity = "0";
+  document.getElementById('sidebar').style.width = "0";
+  setTimeout(function(){
+    document.getElementById('sidebar').style.display = "none";
+  }, 1000);
+  document.getElementById('menuo').style.display = "block";
+  document.getElementById('menu').style.display = "none";
+}
+
+</script>
+
+    <div class="back-to-top" onclick="topFunction()">
+		<i class="fa fa-chevron-up"></i>
+	</div>
+	<script>
+	mybutton = document.getElementsByClassName("back-to-top")[0];
+		
+		window.onscroll = function() {scrollFunction()};
+		
+		function scrollFunction() {
+			if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+				mybutton.style.display = "block";
+			} else {
+				mybutton.style.display = "none";
+			}
+		}
+		
+		function topFunction() {
+			document.body.scrollTop = 0;
+			document.documentElement.scrollTop = 0;
+		}
+	</script>
+    <video 
+  autoplay 
+  muted 
+  loop 
+  playsinline 
+  id="bg-video"
+>
+  <source src="ocean.mp4" type="video/mp4">
+</video>
+</body>
+</html>
+
+
+
+
